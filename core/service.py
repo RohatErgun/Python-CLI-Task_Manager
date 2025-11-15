@@ -3,7 +3,7 @@ from core.task import Task
 
 
 class TaskService:
-    def __int__(self):
+    def __init__(self):
         self.repo = TaskRepository()
 
     def add(self, title, desc, due, tag):

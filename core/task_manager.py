@@ -2,6 +2,7 @@ from core.database import get_connection
 
 # Encapsulates SQL
 
+
 class TaskRepository:
     def add(self, task):
         with get_connection() as conn:
