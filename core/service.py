@@ -12,6 +12,8 @@ class TaskService:
 
     def list(self):
         rows = self.repo.list()
+        if not rows:
+            print("[ ]")
         for row in rows:
             print(f"[{row['id']}] {row['title']} ({row['status']})")
 

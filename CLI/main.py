@@ -7,7 +7,7 @@ from CLI.commands.delete import Delete
 
 
 class TaskCLI:
-    def __int__(self):
+    def __init__(self):
         self.service = TaskService()
         self.parser = argparse.ArgumentParser(description="Taskit")
         subparsers = self.parser.add_subparsers(dest="command")
