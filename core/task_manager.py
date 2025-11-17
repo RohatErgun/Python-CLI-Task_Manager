@@ -1,7 +1,5 @@
 from core.database import get_connection
 
-# Encapsulates SQL
-
 
 class TaskRepository:
     def add(self, task):
@@ -26,8 +24,26 @@ class TaskRepository:
             conn.execute("DELETE FROM tasks WHERE id=?", (task_id,))
             conn.commit()
 
-    def search(self, task=None, task_id=None):
-        pass
+    def search(self, title=None, task_id=None, tag=None):
+        with get_connection() as conn:
+            query = "SELECT * FROM tasks WHERE 1=1"
+            params = []
+
+            if title is not None:
+                query += " AND title LIKE ?"
+                params.append(f"%{title}%")
+
+            if task_id is not None:
+                query += " AND id = ?"
+                params.append(task_id)
+
+            if tag is not None:
+                query += " AND tag = ?"
+                params.append(tag)
+
+            cursor = conn.execute(query, params)
+            return cursor.fetchall()
+
 
     def update(self, task_id, title=None, desc=None, due=None, tag=None):
         updates = []
