@@ -6,41 +6,43 @@ from Log.log import LogSystem
 class TaskService:
     def __init__(self):
         self.repo = TaskRepository()
-        self.tasks = {}
-        self.id = 1
 
     def print_help(self):
-        print(f"\ntask not found\t(-h/--help) for more information")
+        print("\ntask not found\t(-h/--help) for more information")
+
+    def task_exists(self, task_id):
+        rows = self.repo.search(task_id=task_id)
+        return len(rows) > 0
 
     @LogSystem.logged
     def add(self, title, desc, due, tag):
-        if title not in self.tasks:
-            task = Task(title, desc, due, tag)
-            self.repo.add(task)
-            self.tasks[title] = self.id
-            self.id += self.id
-        else:
-            print(f"Duplicate {title} found\t(-h/--help) for more information")
+        task = Task(title, desc, due, tag)
+        task_id = self.repo.add(task)     # DB inserts & returns id
+        print(f"Task added with ID {task_id}")
 
     @LogSystem.logged
     def list(self):
         rows = self.repo.list()
         if not rows:
             print("[ ]")
+            return
+
         for row in rows:
             print(f"[{row['id']}] {row['title']} ({row['status']})")
 
     @LogSystem.logged
     def done(self, task_id):
-        if task_id in self.tasks.values():
+        if self.task_exists(task_id):
             self.repo.mark_done(task_id)
+            print(f"Task {task_id} marked as done")
         else:
             self.print_help()
 
     @LogSystem.logged
     def delete(self, task_id):
-        if task_id in self.tasks.values():
+        if self.task_exists(task_id):
             self.repo.delete(task_id)
+            print(f"Task {task_id} deleted")
         else:
             self.print_help()
 
@@ -50,7 +52,19 @@ class TaskService:
 
         if not rows:
             print("[ ]")
+            return
 
         for row in rows:
-            print(f"[{row['id']}] {row['title']} {row['description']} {row['due_date']} "
-                  f"{row['tag']} ({row['status']})")
+            print(
+                f"[{row['id']}] {row['title']} {row['description']} "
+                f"{row['due_date']} {row['tag']} ({row['status']})"
+            )
+
+    @LogSystem.logged
+    def update(self, task_id, new_desc):
+        if self.task_exists(task_id):
+            self.repo.update(task_id, new_desc)
+            print(f"Task {task_id} updated")
+        else:
+            self.print_help()
+

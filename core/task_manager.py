@@ -4,10 +4,11 @@ from core.database import get_connection
 class TaskRepository:
     def add(self, task):
         with get_connection() as conn:
-            conn.execute("INSERT INTO tasks (title, description, due_date, tag) "
-                         "VALUES (?, ?, ?, ?)",
-                         (task.title, task.description, task.due_date, task.tag))
+            cursor = conn.execute("INSERT INTO tasks (title, description, due_date, tag) "
+                                  "VALUES (?, ?, ?, ?)",
+                                  (task.title, task.description, task.due_date, task.tag))
             conn.commit()
+            return cursor.lastrowid
 
     def list(self):
         with get_connection() as conn:
@@ -44,8 +45,7 @@ class TaskRepository:
             cursor = conn.execute(query, params)
             return cursor.fetchall()
 
-
-    def update(self, task_id, title=None, desc=None, due=None, tag=None):
-        updates = []
-        params = []
-        pass
+    def update(self, task_id, new_desc):
+        with get_connection() as conn:
+            conn.execute("UPDATE tasks SET description = ? WHERE ID = ?", (new_desc, task_id)
+                         )
