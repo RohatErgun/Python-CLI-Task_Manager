@@ -5,6 +5,7 @@ from CLI.commands.list import List
 from CLI.commands.done import Done
 from CLI.commands.delete import Delete
 from CLI.commands.search import Search
+from CLI.commands.update import Update
 
 
 class TaskCLI:
@@ -19,6 +20,7 @@ class TaskCLI:
             Done(),
             Delete(),
             Search(),
+            Update(),
         ]
 
         for cmd in self.commands:
