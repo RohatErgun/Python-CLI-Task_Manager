@@ -3,7 +3,7 @@ from CLI.commands.base import Command
 
 class Search(Command):
     name = "search"
-    help = "Seach a task"
+    help = "Search a task"
 
     def add_arguments(self, parser):
         parser.add_argument("--title", default=None)
