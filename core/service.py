@@ -1,6 +1,7 @@
 from core.task_manager import TaskRepository
 from core.task import Task
 from Log.log import LogSystem
+from Pomodoro.pomodoro import Pomodoro
 
 
 class TaskService:
@@ -17,7 +18,7 @@ class TaskService:
     @LogSystem.logged
     def add(self, title, desc, due, tag):
         task = Task(title, desc, due, tag)
-        task_id = self.repo.add(task)     # DB inserts & returns id
+        task_id = self.repo.add(task)  # DB inserts & returns id
         print(f"Task added with ID {task_id}")
 
     @LogSystem.logged
@@ -68,3 +69,11 @@ class TaskService:
         else:
             self.print_help()
 
+    """ 
+        function logic implemented in Pomodoro/pomodoro.py
+        TaskService handles function for more simplistic CLI/main.py  
+    """
+    @LogSystem.logged
+    def pomo(self):
+        pomo = Pomodoro()
+        pomo.main()

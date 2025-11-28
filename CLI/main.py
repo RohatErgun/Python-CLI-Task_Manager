@@ -6,6 +6,7 @@ from CLI.commands.done import Done
 from CLI.commands.delete import Delete
 from CLI.commands.search import Search
 from CLI.commands.update import Update
+from CLI.commands.pomo import PomoCommand
 
 
 class TaskCLI:
@@ -21,6 +22,7 @@ class TaskCLI:
             Delete(),
             Search(),
             Update(),
+            PomoCommand(),
         ]
 
         for cmd in self.commands:
